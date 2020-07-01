@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import tkk
 
 class Datatrackingapp(tk.Tk):
 
@@ -6,16 +7,16 @@ class Datatrackingapp(tk.Tk):
 
         tk.Tk.__init__(self, *args, **kwargs)
         container = tk.Frame(self)
-
         container.pack(side='top',fill='both',expand = True)
-
         container.grid_rowconfigure(0, weight=1)
         container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
-        frame = StartPage(container,self)
-        self.frames[StartPage] = frame
-        frame.grid(row=0,column=0,sticky="nsew")
+
+        for f in (StartPage, page_two):
+            frame = f(container,self)
+            self.frames[f] = frame
+            frame.grid(row=0,column=0,sticky="nsew")
 
         self.show_frame(StartPage)
 
@@ -31,16 +32,13 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Data-Tracker 2020", font=('Arial',12))
         label.pack(pady=10,padx=10)
 
-        exit_button = tk.Button(self, text='Exit',
-        command = lambda: func('Hope you enjoyed using our app!'))
+        exit_button = ttk.Button(self, text='Exit',
+        command = quit)
         exit_button.pack()
 
-        plot_button = tk.Button(self, text='Start Plot!', 
-        command = lambda: func('Next Page'))
+        plot_button = ttk.Button(self, text='Start Plot!', 
+        command = lambda: controller.show_frame(page_two))
         plot_button.pack()
-
-def func(text):
-    print(text)
 
 app = Datatrackingapp()
 app.mainloop()
