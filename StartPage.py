@@ -39,8 +39,8 @@ class StartPage(tk.Frame):
         command = lambda: func('Next Page'))
         plot_button.pack()
 
-def func(param):
-    print(param)
+def func(text):
+    print(text)
 
 app = Datatrackingapp()
 app.mainloop()
