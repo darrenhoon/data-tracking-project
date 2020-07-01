@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import tkk
+from tkinter import ttk
 
 class Datatrackingapp(tk.Tk):
 
@@ -13,7 +13,7 @@ class Datatrackingapp(tk.Tk):
 
         self.frames = {}
 
-        for f in (StartPage, page_two):
+        for f in (StartPage,): #to be edited upon adding pagetwo
             frame = f(container,self)
             self.frames[f] = frame
             frame.grid(row=0,column=0,sticky="nsew")
@@ -36,9 +36,9 @@ class StartPage(tk.Frame):
         command = quit)
         exit_button.pack()
 
-        plot_button = ttk.Button(self, text='Start Plot!', 
-        command = lambda: controller.show_frame(page_two))
-        plot_button.pack()
+        # plot_button = ttk.Button(self, text='Start Plot!', 
+        # command = lambda: controller.show_frame(page_two))
+        # plot_button.pack()
 
 app = Datatrackingapp()
 app.mainloop()
