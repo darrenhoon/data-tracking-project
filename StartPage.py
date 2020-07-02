@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import ttk
+from tkinter.ttk import *
 
 class Datatrackingapp(tk.Tk):
 
@@ -29,16 +29,26 @@ class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
-        label = tk.Label(self, text="Data-Tracker 2020", font=('Arial',12))
-        label.pack(pady=10,padx=10)
+        label = tk.Label(self, text="Data Tracker 2020", font="Helvetica 16 bold italic",justify=tk.CENTER,
+        fg='white',bg='black')
+        label.grid(row=0,column=2)
 
-        exit_button = ttk.Button(self, text='Exit',
-        command = quit)
-        exit_button.pack()
+        style = Style()
+        style.configure('TButton', font=('Arial',10,'bold'), foreground = 'red',
+        background = 'black')
+        style.map('TButton', background = [('active','black')], 
+        foreground = [('active', 'navy')])
 
-        # plot_button = ttk.Button(self, text='Start Plot!', 
-        # command = lambda: controller.show_frame(page_two))
-        # plot_button.pack()
+        plot_button = Button(self, text='Start Plot!', command = lambda: func('Next Page'))
+        plot_button.grid(row=1,column=2)
+
+        exit_button = Button(self, text='Exit',command = quit)
+        exit_button.grid(row=2,column=2)
+
+def func(text):
+    print(text)
 
 app = Datatrackingapp()
+app.title('Data Tracker')
+# app.geometry('400x400')
 app.mainloop()
