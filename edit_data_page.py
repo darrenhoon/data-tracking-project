@@ -9,18 +9,21 @@ from matplotlib.figure import Figure
 class edit_data_page(object):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
-        self.title = tk.title(self, "Plot Page")
+        self.title = tk.title(self, "Edit Values Page")
         controller.frames[self]= self(controller.container, controller)
         self.grid(row=0,column=0,sticky="nsew")
 
-        text = tk.Label(text="Edit Data Page", font=("Arial",12)))
+        text = tk.Label(text="Edit Data Page", font=("Times New Roman",14)))
         text.pack()
         heading= tkFont.Font(text, text.cget("font"))
         text.configure(underline = True)
         heading.configure(font=text)
 
         #save button
+        ##edited info here will be written on the csv, then the button just goes back to the plotpage
 
         #discard button
+        discard_button = tkk.Button(self, text="Discard", command = lambda: controller.showFrame(graphing_page))
+        discard_button.pack()
 
         #go and edit the csv yourself because you are adding another axis to the plot

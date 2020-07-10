@@ -30,18 +30,25 @@ class graphing_page:
         back_button = tkk.Button(self, text="Back to Main Menu", command = lambda: controller.showFrame(parent))
         back_button.pack()
 
-        #to add a new button that opens the edit data page. edit_data_page is the class name for the edit data page (unless you change it to something else)
+        #to add a new button that opens the edit data page. edit_data_page is the class name for the edit data page
         edit_data_page_button = tkk.Button(self, text="Edit Data", command = lambda: controller.showFrame(edit_data_page))
         edit_data_page_button.pack()
 
+        
+
         #plot the graph on matplotlib's side first
         fig = Figure(figsize(5,5), dpi=100)
-        graph=fig.add_subsplot(1,1,1)
 
         # to show the plotted graph above on the window of tkinter. INSERT DATA EXTRACTED FROM CSV HERE. #need to do: once data is passed here, need to evaluate if the data is 2d or 3d graph
-        # data = 
-        page = FigureCanvasTkAgg(fig,self)
-        page.show()
+        data = controller.list()
+        graph=fig.add_subsplot(111)
+        if len(data)>3:
+            raise Exception("You cannot plot graphs with more than 3 dimensions! Go do math mods instead!")
+        elif len(data)==3:
+            graph=fig.add_subsplot(111, projection="3d")
+
+        page = FigureCanvasTkAgg(fig,master=controller)
+        page.draw()
         page.get_tk_widget().pack(side=tk.TOP,fill=tk.BOTH,expand=True)
 
         #toolbar page, for futher applications to edit saved data
