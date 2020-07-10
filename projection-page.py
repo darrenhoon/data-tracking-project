@@ -8,14 +8,12 @@ from matplotlib.figure import Figure
 
 #controller is the datatrackerapp, parent is the main_menu
 
-class page_two:
+class graphing_page:
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
         self.title = tk.title(self, "Plot Page")
-        controller.frames[self]= page_two(controller.container, controller)
+        controller.frames[self]= self(controller.container, controller)
         self.grid(row=0,column=0,sticky="nsew") # @David, What is this?
-
-
 
         ##this part can be edited if we do not want underline for the whole heading
         text = tk.Label(text="Plotting Page", font=("Arial",12)))
@@ -24,23 +22,27 @@ class page_two:
         text.configure(underline = True)
         heading.configure(font=text)
 
-        # if the above underliing causes issues, use the below code which has no underline
+        # if the above underlining causes issues, use the below code which has no underline
         # label = tk.label(self, text="Plotting Page", font=("Arial",12))
         # label.pack(pady=500,padx=500)
 
-        back_button = tkk.Button(self, text="Back to Main Menu", command = lambda: controller.showFrame(Main_Menu))
-        #the Main_Menu to be changed based on what the main menu class is going to be
+        #back to main menu button
+        back_button = tkk.Button(self, text="Back to Main Menu", command = lambda: controller.showFrame(parent))
         back_button.pack()
 
-        fig = Figure(figsize(5,5), dpi=100) #backend to generate the window
+        #to add a new button that opens the edit data page. edit_data_page is the class name for the edit data page (unless you change it to something else)
+        edit_data_page_button = tkk.Button(self, text="Edit Data", command = lambda: controller.showFrame(edit_data_page))
+        edit_data_page_button.pack()
+
+        #plot the graph on matplotlib's side first
+        fig = Figure(figsize(5,5), dpi=100)
         graph=fig.add_subsplot(1,1,1)
 
-        ##INSERT DATA EXTRACTED FROM CSV HERE
+        # to show the plotted graph above on the window of tkinter. INSERT DATA EXTRACTED FROM CSV HERE. #need to do: once data is passed here, need to evaluate if the data is 2d or 3d graph
         # data = 
         page = FigureCanvasTkAgg(fig,self)
         page.show()
         page.get_tk_widget().pack(side=tk.TOP,fill=tk.BOTH,expand=True)
-
 
         #toolbar page, for futher applications to edit saved data
         toolbar=NavigationToolbar2Tk(page,self)
