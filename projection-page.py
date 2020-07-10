@@ -6,10 +6,16 @@ matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 
+#controller is the datatrackerapp, parent is the main_menu
+
 class page_two:
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
-        title = tk.title(self, "Plot Page")
+        self.title = tk.title(self, "Plot Page")
+        controller.frames[self]= page_two(controller.container, controller)
+        self.grid(row=0,column=0,sticky="nsew") # @David, What is this?
+
+
 
         ##this part can be edited if we do not want underline for the whole heading
         text = tk.Label(text="Plotting Page", font=("Arial",12)))
