@@ -27,11 +27,11 @@ class graphing_page:
         # label.pack(pady=500,padx=500)
 
         #back to main menu button
-        back_button = tkk.Button(self, text="Back to Main Menu", command = lambda: controller.showFrame(parent))
+        back_button = tkk.Button(self, text="Back to Main Menu", command = lambda: controller.show_frame(parent))
         back_button.pack()
 
         #to add a new button that opens the edit data page. edit_data_page is the class name for the edit data page
-        edit_data_page_button = tkk.Button(self, text="Edit Data", command = lambda: controller.showFrame(edit_data_page))
+        edit_data_page_button = tkk.Button(self, text="Edit Data", command = lambda: controller.show_frame(edit_data_page))
         edit_data_page_button.pack()
 
         
@@ -39,7 +39,10 @@ class graphing_page:
         #plot the graph on matplotlib's side first
         fig = Figure(figsize(5,5), dpi=100)
 
-        # to show the plotted graph above on the window of tkinter. INSERT DATA EXTRACTED FROM CSV HERE. #need to do: once data is passed here, need to evaluate if the data is 2d or 3d graph
+        # to show the plotted graph above on the window of tkinter. INSERT DATA EXTRACTED FROM CSV HERE. #need to do: once data is passed here,
+        # need to evaluate if the data is 2d or 3d graph
+        #@ BoonJuey pls edit this data = controller.list() to fit your datatype
+
         data = controller.list()
         graph=fig.add_subsplot(111)
         if len(data)>3:

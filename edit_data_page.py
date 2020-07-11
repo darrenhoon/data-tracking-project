@@ -20,10 +20,14 @@ class edit_data_page(object):
         heading.configure(font=text)
 
         #save button
-        ##edited info here will be written on the csv, then the button just goes back to the plotpage
+        ##edited info here will be written on the csv, then the button just goes back to the graphing_page
+        #to be updated
+        save_button = tkk.Button(self, text="Save changes", command = lambda: controller.show_frame(graphing_page))
 
         #discard button
-        discard_button = tkk.Button(self, text="Discard", command = lambda: controller.showFrame(graphing_page))
+        discard_button = tkk.Button(self, text="Discard", command = lambda: controller.show_frame(graphing_page))
         discard_button.pack()
 
         #go and edit the csv yourself because you are adding another axis to the plot
+        open_csv_button = tkk.Button(self, text="Edit File", command = lambda: controller.open_csv())
+        open_csv_button.pack()
