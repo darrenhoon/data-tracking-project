@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter.ttk import *
+from subprocess import Popen
+from tkinter import filedialog
+import os
+import tkinter.messagebox
 
 class Datatrackingapp(tk.Tk):
 
@@ -24,6 +28,22 @@ class Datatrackingapp(tk.Tk):
 
         frame = self.frames[cont]
         frame.tkraise()
+    
+    def open_csv(self):
+
+        tkinter.messagebox.showinfo("Warning","The program will now shut down and the data spreadsheet will be opened. Please wait a few moment for your pc to open \
+            the excel/csv file. Thank you!")
+
+        #approach 1: use pop open
+        #p = Popen('filename.csv', shell=True)
+        #exit_button = tk.Button(self, text='Exit',command = quit)
+        #if above does not work, use this below but the filepath must be specific to where your MS Excel is stored in your pc.
+        # subprocess.Popen(r'C:\Program Files (x86)\Microsoft Office\Office14\EXCEL.EXE stack.csv')
+
+        #approach 2: use os to open filename
+        filename = filedialog.askopenfilename(initialdir="C:/", title="select file")
+        os.system(filename)
+        
 
 class StartPage(tk.Frame):
 
