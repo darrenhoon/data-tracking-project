@@ -39,7 +39,7 @@ class StartPage(tk.Frame):
         style.map('TButton', background = [('active','black')], 
         foreground = [('active', 'navy')])
 
-        plot_button = Button(self, text='Start Plot!', command = lambda: func('Next Page'))
+        plot_button = Button(self, text='Start Plot!', command = lambda: controller.show_frame(graphing_page))
         plot_button.grid(row=1,column=2)
 
         exit_button = Button(self, text='Exit',command = quit)
@@ -48,7 +48,8 @@ class StartPage(tk.Frame):
 def func(text):
     print(text)
 
-app = Datatrackingapp()
-app.title('Data Tracker')
-# app.geometry('400x400')
-app.mainloop()
+if __name__ == "__main__":
+    app = Datatrackingapp()
+    app.title('Data Tracker')
+    # app.geometry('400x400')
+    app.mainloop()
