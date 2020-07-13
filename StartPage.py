@@ -5,8 +5,6 @@ from tkinter import filedialog
 import os
 import tkinter.messagebox
 
-#hi
-
 class Datatrackingapp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
@@ -19,17 +17,17 @@ class Datatrackingapp(tk.Tk):
 
         self.frames = {}
 
-        for f in (StartPage,): #to be edited upon adding pagetwo
-            frame = f(container,self)
-            self.frames[f] = frame
-            frame.grid(row=0,column=0,sticky="nsew")
-
         self.show_frame(StartPage)
 
     def show_frame(self,cont):
 
         frame = self.frames[cont]
         frame.tkraise()
+
+    def add_frame(self,f):
+        frame = f(container,self)
+        self.frames[f]=frame
+        frame.grid(row=0,column=0,sticky="nsew")
     
     def open_csv(self):
 
@@ -60,6 +58,8 @@ class StartPage(tk.Frame):
         background = 'black')
         style.map('TButton', background = [('active','black')], 
         foreground = [('active', 'navy')])
+
+        controller.add_frame(self)
 
         plot_button = Button(self, text='Start Plot!', command = lambda: controller.show_frame(graphing_page))
         plot_button.grid(row=1,column=2)

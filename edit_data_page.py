@@ -10,14 +10,14 @@ class edit_data_page(object):
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
         self.title = tk.title(self, "Edit Values Page")
-        controller.frames[self]= self(controller.container, controller)
-        self.grid(row=0,column=0,sticky="nsew")
 
         text = tk.Label(text="Edit Data Page", font=("Times New Roman",14)))
         text.pack()
         heading= tkFont.Font(text, text.cget("font"))
         text.configure(underline = True)
         heading.configure(font=text)
+
+        controller.add_frame(self)
 
         #save button
         ##edited info here will be written on the csv, then the button just goes back to the graphing_page
