@@ -8,6 +8,8 @@ from matplotlib.figure import Figure
 
 #controller is the datatrackerapp, parent is the main_menu
 
+#hi2
+
 class graphing_page:
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
