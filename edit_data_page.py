@@ -17,8 +17,6 @@ class edit_data_page(object):
         text.configure(underline = True)
         heading.configure(font=text)
 
-        controller.add_frame(self)
-
         #save button
         ##edited info here will be written on the csv, then the button just goes back to the graphing_page
         #to be updated

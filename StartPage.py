@@ -4,18 +4,23 @@ from subprocess import Popen
 from tkinter import filedialog
 import os
 import tkinter.messagebox
+import projection-page.py
+import edit_data_page.py
 
 class Datatrackingapp(tk.Tk):
 
     def __init__(self, *args, **kwargs):
 
         tk.Tk.__init__(self, *args, **kwargs)
-        container = tk.Frame(self)
-        container.pack(side='top',fill='both',expand = True)
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        self.container = tk.Frame(self)
+        self.container.pack(side='top',fill='both',expand = True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
+
+        for f in (StartPage,graphing_page,edit_data_page):
+            self.add_frame(self.container)
 
         self.show_frame(StartPage)
 
@@ -70,8 +75,6 @@ class StartPage(tk.Frame):
 def func(text):
     print(text)
 
-if __name__ == "__main__":
-    app = Datatrackingapp()
-    app.title('Data Tracker')
-    # app.geometry('400x400')
-    app.mainloop()
+app = Datatrackingapp()
+app.title('Data Tracker')
+app.mainloop()
