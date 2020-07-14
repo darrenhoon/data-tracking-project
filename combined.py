@@ -75,13 +75,13 @@ class StartPage(tk.Frame):
         style.map('TButton', background = [('active','black')], 
         foreground = [('active', 'navy')])
 
-        exit_button = Button(self, text='Exit',command = quit)
-        #exit_button.grid(row=2,column=2)
-        exit_button.pack(side=tk.TOP,padx=10,pady=10)
-
         plot_button = Button(self, text='Start Plot!', command = lambda: controller.show_frame(graphing_page))
         #plot_button.grid(row=1,column=2)
         plot_button.pack(side=tk.TOP,padx=10,pady=10)
+
+        exit_button = Button(self, text='Exit',command = quit)
+        #exit_button.grid(row=2,column=2)
+        exit_button.pack(side=tk.TOP,padx=10,pady=10)
 
 class graphing_page(tk.Frame):
     def __init__(self, parent, controller):
@@ -126,20 +126,21 @@ class edit_data_page(tk.Frame):
         text = tk.Label(self,text="Edit Data Page", font=("Times New Roman",14))
         text.pack()
         heading= font.Font(text, text.cget("font"))
-        text.configure(underline = True)
+        # text.configure(underline = True) #Doesn't underline the entire text
 
         #save button
         ##edited info here will be written on the csv, then the button just goes back to the graphing_page
         #to be updated
         save_button = ttk.Button(self, text="Save changes", command = lambda: controller.show_frame(graphing_page))
+        save_button.pack(padx=10,pady=10)
 
         #discard button
         discard_button = ttk.Button(self, text="Discard", command = lambda: controller.show_frame(graphing_page))
-        discard_button.pack()
+        discard_button.pack(padx=10,pady=10)
 
         #go and edit the csv yourself because you are adding another axis to the plot
         open_csv_button = ttk.Button(self, text="Edit File", command = lambda: controller.open_csv())
-        open_csv_button.pack()
+        open_csv_button.pack(padx=10,pady=10)
 
 
 if __name__ == "__main__":
