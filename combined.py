@@ -1,17 +1,14 @@
 import tkinter as tk
-from tkinter import ttk
-from tkinter import font
+from tkinter import ttk, font, filedialog
 import matplotlib
 matplotlib.use("TkAgg")
 from tkinter.ttk import *
-from subprocess import Popen
-from tkinter import filedialog
-import os
+import subprocess, os, platform
 import tkinter.messagebox
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 
-class Datatrackingapp(tk.Tk):
+class Datatrackingapp(tk.Tk): #root window
 
     def __init__(self, *args, **kwargs):
 
@@ -23,11 +20,11 @@ class Datatrackingapp(tk.Tk):
 
         self.frames = {}
 
-        for f in (StartPage,graphing_page,edit_data_page): #to be edited upon adding pagetwo
-            self.add_frame(f)
-            # frame = f(container,self) 
-            # self.frames[f] = frame
-            # frame.grid(row=0,column=0,sticky="nsew")
+        for f in (StartPage,graphing_page,edit_data_page):
+            # self.add_frame(f)
+            frame = f(self.container,self) 
+            self.frames[f] = frame
+            frame.grid(row=0,column=0,sticky="nsew")
 
         self.show_frame(StartPage)
 
@@ -43,24 +40,29 @@ class Datatrackingapp(tk.Tk):
     
     def open_csv(self):
 
-        tkinter.messagebox.showinfo("Warning","The program will now shut down and the data spreadsheet will be opened. Please wait a few moment for your pc to open \
-            the excel/csv file. Thank you!")
-
-        #approach 1: use pop open
-        #p = Popen('filename.csv', shell=True)
-        #exit_button = tk.Button(self, text='Exit',command = quit)
-        #if above does not work, use this below but the filepath must be specific to where your MS Excel is stored in your pc.
-        # subprocess.Popen(r'C:\Program Files (x86)\Microsoft Office\Office14\EXCEL.EXE stack.csv')
-
-        #approach 2: use os to open filename
-        filename = filedialog.askopenfilename(initialdir="C:/", title="select file")
-        os.system(filename)
+        tkinter.messagebox.showinfo("Warning","The program will now shut down and the data spreadsheet will be opened. Please wait a few moment\
+for your pc to open your selected file. Thank you!")
+        
+        filepath = filedialog.askopenfilename(initialdir="C:/", title="select file")
+        print(filepath)
+        #big creds to https://stackoverflow.com/questions/434597/open-document-with-default-os-application-in-python-both-in-windows-and-mac-os
+        # ily :')
+        if platform.system() == 'Darwin':       # macOS
+            subprocess.call(('open', filepath))
+        elif platform.system() == 'Windows':    # Windows
+            os.startfile(filepath)
+        else:                                   # linux variants
+            subprocess.call(('xdg-open', filepath))
+        quit()
         
 
 class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
+        self.parent = parent
+        self.controller = controller
         tk.Frame.__init__(self, parent)
+        self.controller.title("Data Tracker")
         
         label = tk.Label(self, text="Data Tracker 2020", font="Helvetica 16 bold italic",justify=tk.CENTER,
         fg='white',bg='black')
@@ -78,65 +80,47 @@ class StartPage(tk.Frame):
         exit_button = Button(self, text='Exit',command = quit)
         exit_button.grid(row=2,column=2)
 
-class graphing_page:
+class graphing_page(tk.Frame):
     def __init__(self, parent, controller):
+        self.parent = parent
+        self.controller = controller
         tk.Frame.__init__(self,parent)
-        self.title = tk.title(self, "Plot Page")
+        self.controller.title("Plot Page")
 
-        ##this part can be edited if we do not want underline for the whole heading
-        #text = tk.Label(text="Plotting Page", font=("Arial",12))
-        #text.pack()
-        #heading= font.Font(text, text.cget("font"))
-        #text.configure(underline = True)
-        #heading.configure(font=text)
+        label = tk.Label(self, text="Plotting Page", font=("Arial",12))
+        #label.pack(pady=500,padx=500)
 
-        # if the above underlining causes issues, use the below code which has no underline
-        label = tk.label(self, text="Plotting Page", font=("Arial",12))
-        label.pack(pady=500,padx=500)
-
-        #back to main menu button
         back_button = ttk.Button(self, text="Back to Main Menu", command = lambda: controller.show_frame(StartPage))
         back_button.pack()
 
-        #to add a new button that opens the edit data page. edit_data_page is the class name for the edit data page
         edit_data_page_button = ttk.Button(self, text="Edit Data", command = lambda: controller.show_frame(edit_data_page))
         edit_data_page_button.pack()
 
-        
+        fig = Figure(figsize=(5,5), dpi=100)
 
-        #plot the graph on matplotlib's side first
-        fig = Figure(figsize(5,5), dpi=100)
-
-        # to show the plotted graph above on the window of tkinter. INSERT DATA EXTRACTED FROM CSV HERE. #need to do: once data is passed here,
-        # need to evaluate if the data is 2d or 3d graph
-        #@ BoonJuey pls edit this data = controller.list() to fit your datatype
-
-        data = controller.list()
-        graph=fig.add_subsplot(111)
+        data = [[0,1,2,3,4,5,6],[7,6,5,4,3,2,1]] ##data to be edited
+        graph=fig.add_subplot(111)
         if len(data)>3:
             raise Exception("You cannot plot graphs with more than 3 dimensions! Go do math mods instead!")
         elif len(data)==3:
-            graph=fig.add_subsplot(111, projection="3d")
+            graph=fig.add_subplot(111, projection="3d")
 
+        graph.plot(data)
         page = FigureCanvasTkAgg(fig,master=controller)
         page.draw()
-        page.get_tk_widget().pack(side=tk.TOP,fill=tk.BOTH,expand=True)
+        
 
-        #toolbar page, for futher applications to edit saved data
-        toolbar=NavigationToolbar2Tk(page,self)
-        toolbar.update()
-        page.tkcanvas.pack(side=tk.BOTTOM,fill=tk.BOTH,expand=True)
-
-class edit_data_page(object):
+class edit_data_page(tk.Frame):
     def __init__(self, parent, controller):
+        self.parent = parent
+        self.controller = controller
         tk.Frame.__init__(self,parent)
-        self.title = tk.title(self, "Edit Values Page")
+        self.controller.title("Edit Values Page")
 
         text = tk.Label(text="Edit Data Page", font=("Times New Roman",14))
         text.pack()
         heading= font.Font(text, text.cget("font"))
         text.configure(underline = True)
-        heading.configure(font=text)
 
         #save button
         ##edited info here will be written on the csv, then the button just goes back to the graphing_page
@@ -154,8 +138,6 @@ class edit_data_page(object):
 
 if __name__ == "__main__":
     app = Datatrackingapp()
-    app.title('Data Tracker')
-    
     # app.geometry('400x400')
     app.mainloop()
 
