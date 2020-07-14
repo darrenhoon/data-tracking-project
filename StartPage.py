@@ -18,7 +18,7 @@ class Datatrackingapp(tk.Tk):
         self.frames = {}
 
         for f in (StartPage,): #to be edited upon adding pagetwo
-            frame = f(container,self)
+            frame = f(container,self) 
             self.frames[f] = frame
             frame.grid(row=0,column=0,sticky="nsew")
 
@@ -49,6 +49,10 @@ class StartPage(tk.Frame):
 
     def __init__(self, parent, controller):
         tk.Frame.__init__(self, parent)
+        # frame = self(controller.container,controller)
+        # controller.frame[self]= frame
+        # frame.grid(row=0,column=0,sticky='nsew')
+        
         label = tk.Label(self, text="Data Tracker 2020", font="Helvetica 16 bold italic",justify=tk.CENTER,
         fg='white',bg='black')
         label.grid(row=0,column=2)
@@ -65,11 +69,9 @@ class StartPage(tk.Frame):
         exit_button = Button(self, text='Exit',command = quit)
         exit_button.grid(row=2,column=2)
 
-def func(text):
-    print(text)
-
 if __name__ == "__main__":
     app = Datatrackingapp()
     app.title('Data Tracker')
+    
     # app.geometry('400x400')
     app.mainloop()
