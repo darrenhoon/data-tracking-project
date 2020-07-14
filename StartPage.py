@@ -10,17 +10,18 @@ class Datatrackingapp(tk.Tk):
     def __init__(self, *args, **kwargs):
 
         tk.Tk.__init__(self, *args, **kwargs)
-        container = tk.Frame(self)
-        container.pack(side='top',fill='both',expand = True)
-        container.grid_rowconfigure(0, weight=1)
-        container.grid_columnconfigure(0, weight=1)
+        self.container = tk.Frame(self)
+        self.container.pack(side='top',fill='both',expand = True)
+        self.container.grid_rowconfigure(0, weight=1)
+        self.container.grid_columnconfigure(0, weight=1)
 
         self.frames = {}
 
         for f in (StartPage,): #to be edited upon adding pagetwo
-            frame = f(container,self) 
-            self.frames[f] = frame
-            frame.grid(row=0,column=0,sticky="nsew")
+            self.add_frame(f)
+            # frame = f(container,self) 
+            # self.frames[f] = frame
+            # frame.grid(row=0,column=0,sticky="nsew")
 
         self.show_frame(StartPage)
 
@@ -28,6 +29,11 @@ class Datatrackingapp(tk.Tk):
 
         frame = self.frames[cont]
         frame.tkraise()
+
+    def add_frame(self,f):
+        frame = f(self.container,self)
+        self.frames[f]=frame
+        frame.grid(row=0,column=0,sticky="nsew")
     
     def open_csv(self):
 
