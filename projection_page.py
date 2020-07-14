@@ -24,8 +24,6 @@ class graphing_page:
         # label = tk.label(self, text="Plotting Page", font=("Arial",12))
         # label.pack(pady=500,padx=500)
 
-        controller.add_frame(self)
-
         #back to main menu button
         back_button = ttk.Button(self, text="Back to Main Menu", command = lambda: controller.show_frame(parent))
         back_button.pack()

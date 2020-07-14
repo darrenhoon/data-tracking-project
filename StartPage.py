@@ -71,8 +71,6 @@ class StartPage(tk.Frame):
         style.map('TButton', background = [('active','black')], 
         foreground = [('active', 'navy')])
 
-        controller.add_frame(self)
-
         plot_button = Button(self, text='Start Plot!', command = lambda: controller.show_frame(graphing_page))
         plot_button.grid(row=1,column=2)
 
