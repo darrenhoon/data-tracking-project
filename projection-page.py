@@ -12,8 +12,6 @@ class graphing_page:
     def __init__(self, parent, controller):
         tk.Frame.__init__(self,parent)
         self.title = tk.title(self, "Plot Page")
-        controller.frames[self]= self(controller.container, controller)
-        self.grid(row=0,column=0,sticky="nsew") # @David, What is this?
 
         ##this part can be edited if we do not want underline for the whole heading
         text = tk.Label(text="Plotting Page", font=("Arial",12)))
@@ -25,6 +23,8 @@ class graphing_page:
         # if the above underlining causes issues, use the below code which has no underline
         # label = tk.label(self, text="Plotting Page", font=("Arial",12))
         # label.pack(pady=500,padx=500)
+
+        controller.add_frame(self)
 
         #back to main menu button
         back_button = tkk.Button(self, text="Back to Main Menu", command = lambda: controller.show_frame(parent))

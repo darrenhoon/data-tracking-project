@@ -4,6 +4,8 @@ from subprocess import Popen
 from tkinter import filedialog
 import os
 import tkinter.messagebox
+import projection-page.py
+import edit_data_page.py
 
 class Datatrackingapp(tk.Tk):
 
@@ -17,7 +19,7 @@ class Datatrackingapp(tk.Tk):
 
         self.frames = {}
 
-        for f in (StartPage,): #to be edited upon adding pagetwo
+        for f in (StartPage,graphing_page,edit_data_page): #to be edited upon adding pagetwo
             self.add_frame(f)
             # frame = f(container,self) 
             # self.frames[f] = frame
@@ -68,6 +70,8 @@ class StartPage(tk.Frame):
         background = 'black')
         style.map('TButton', background = [('active','black')], 
         foreground = [('active', 'navy')])
+
+        controller.add_frame(self)
 
         plot_button = Button(self, text='Start Plot!', command = lambda: controller.show_frame(graphing_page))
         plot_button.grid(row=1,column=2)
