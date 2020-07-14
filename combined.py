@@ -40,7 +40,7 @@ class Datatrackingapp(tk.Tk): #root window
     
     def open_csv(self):
 
-        tkinter.messagebox.showinfo("Warning","The program will now shut down and the data spreadsheet will be opened. Please wait a few moment\
+        tkinter.messagebox.showinfo("Warning","The program will now shut down and the data spreadsheet will be opened. Please wait a few moment \
 for your pc to open your selected file. Thank you!")
         
         filepath = filedialog.askopenfilename(initialdir="C:/", title="select file")
@@ -67,7 +67,7 @@ class StartPage(tk.Frame):
         label = tk.Label(self, text="Data Tracker 2020", font="Helvetica 16 bold italic",justify=tk.CENTER,
         fg='white',bg='black')
         #label.grid(row=0,column=2)
-        label.pack(side=tk.TOP)
+        label.pack(side=tk.TOP,padx=10,pady=10)
 
         style = Style()
         style.configure('TButton', font=('Arial',10,'bold'), foreground = 'red',
@@ -77,11 +77,11 @@ class StartPage(tk.Frame):
 
         exit_button = Button(self, text='Exit',command = quit)
         #exit_button.grid(row=2,column=2)
-        exit_button.pack(side=tk.BOTTOM)
+        exit_button.pack(side=tk.TOP,padx=10,pady=10)
 
         plot_button = Button(self, text='Start Plot!', command = lambda: controller.show_frame(graphing_page))
         #plot_button.grid(row=1,column=2)
-        plot_button.pack(side=tk.BOTTOM)
+        plot_button.pack(side=tk.TOP,padx=10,pady=10)
 
 class graphing_page(tk.Frame):
     def __init__(self, parent, controller):
@@ -100,9 +100,8 @@ class graphing_page(tk.Frame):
         edit_data_page_button.pack(side=tk.BOTTOM)
 
         fig = Figure(figsize=(5,5), dpi=100)
-
-        data = [[0.5,1.2,2.8,3,4,6,7],[0,3,4,4.5,6,10,9]] ##data to be edited
         graph=fig.add_subplot(111)
+        data = [[0.5,1.2,2.8,3,4,6,7],[0,3,4,4.5,6,10,9]] ##data to be edited
         if len(data)>3:
             raise Exception("You cannot plot graphs with more than 3 dimensions! Go do math mods instead!")
         elif len(data)==3:
@@ -112,9 +111,10 @@ class graphing_page(tk.Frame):
         #graph.ylabel("Sample y label")
         #graph.xlabel("Sample x label")
         #graph.axis([0,10,0,10]) #[xmin,xmax,ymin,ymax]
-        page = FigureCanvasTkAgg(fig,master=controller)
+        # page = FigureCanvasTkAgg(fig,master=controller)
+        page = FigureCanvasTkAgg(fig,self)
         page.draw()
-        page.get_tk_widget().pack(side=tk.BOTTOM)
+        page.get_tk_widget().pack(side=tk.BOTTOM,fill=tk.BOTH,expand=True)
 
 class edit_data_page(tk.Frame):
     def __init__(self, parent, controller):
@@ -123,7 +123,7 @@ class edit_data_page(tk.Frame):
         tk.Frame.__init__(self,parent)
         self.controller.title("Edit Values Page")
 
-        text = tk.Label(text="Edit Data Page", font=("Times New Roman",14))
+        text = tk.Label(self,text="Edit Data Page", font=("Times New Roman",14))
         text.pack()
         heading= font.Font(text, text.cget("font"))
         text.configure(underline = True)
@@ -146,4 +146,3 @@ if __name__ == "__main__":
     app = Datatrackingapp()
     # app.geometry('400x400')
     app.mainloop()
-
