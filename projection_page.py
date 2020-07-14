@@ -1,6 +1,6 @@
-import Tkinter as tk
-from Tkinter import tkk
-import tkFont
+import tkinter as tk
+from tkinter import ttk
+from tkinter import font
 import matplotlib
 matplotlib.use("TkAgg")
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
@@ -14,9 +14,9 @@ class graphing_page:
         self.title = tk.title(self, "Plot Page")
 
         ##this part can be edited if we do not want underline for the whole heading
-        text = tk.Label(text="Plotting Page", font=("Arial",12)))
+        text = tk.Label(text="Plotting Page", font=("Arial",12))
         text.pack()
-        heading= tkFont.Font(text, text.cget("font"))
+        heading= font.Font(text, text.cget("font"))
         text.configure(underline = True)
         heading.configure(font=text)
 
@@ -27,11 +27,11 @@ class graphing_page:
         controller.add_frame(self)
 
         #back to main menu button
-        back_button = tkk.Button(self, text="Back to Main Menu", command = lambda: controller.show_frame(parent))
+        back_button = ttk.Button(self, text="Back to Main Menu", command = lambda: controller.show_frame(parent))
         back_button.pack()
 
         #to add a new button that opens the edit data page. edit_data_page is the class name for the edit data page
-        edit_data_page_button = tkk.Button(self, text="Edit Data", command = lambda: controller.show_frame(edit_data_page))
+        edit_data_page_button = ttk.Button(self, text="Edit Data", command = lambda: controller.show_frame(edit_data_page))
         edit_data_page_button.pack()
 
         
@@ -58,11 +58,3 @@ class graphing_page:
         toolbar=NavigationToolbar2Tk(page,self)
         toolbar.update()
         page.tkcanvas.pack(side=tk.BOTTOM,fill=tk.BOTH,expand=True)
-
-
-
-
-##probably in the final py file rather than here to start the programme
-# root = tk.Tk()
-# gui=page_two(root)
-# root.mainloop()

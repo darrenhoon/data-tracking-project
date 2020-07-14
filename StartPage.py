@@ -4,8 +4,8 @@ from subprocess import Popen
 from tkinter import filedialog
 import os
 import tkinter.messagebox
-import projection-page.py
-import edit_data_page.py
+from .projection_page import graphing_page
+from .edit_data_page import edit_data_page
 
 class Datatrackingapp(tk.Tk):
 
