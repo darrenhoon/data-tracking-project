@@ -66,7 +66,8 @@ class StartPage(tk.Frame):
         
         label = tk.Label(self, text="Data Tracker 2020", font="Helvetica 16 bold italic",justify=tk.CENTER,
         fg='white',bg='black')
-        label.grid(row=0,column=2)
+        #label.grid(row=0,column=2)
+        label.pack(side=tk.TOP)
 
         style = Style()
         style.configure('TButton', font=('Arial',10,'bold'), foreground = 'red',
@@ -74,11 +75,13 @@ class StartPage(tk.Frame):
         style.map('TButton', background = [('active','black')], 
         foreground = [('active', 'navy')])
 
-        plot_button = Button(self, text='Start Plot!', command = lambda: controller.show_frame(graphing_page))
-        plot_button.grid(row=1,column=2)
-
         exit_button = Button(self, text='Exit',command = quit)
-        exit_button.grid(row=2,column=2)
+        #exit_button.grid(row=2,column=2)
+        exit_button.pack(side=tk.BOTTOM)
+
+        plot_button = Button(self, text='Start Plot!', command = lambda: controller.show_frame(graphing_page))
+        #plot_button.grid(row=1,column=2)
+        plot_button.pack(side=tk.BOTTOM)
 
 class graphing_page(tk.Frame):
     def __init__(self, parent, controller):
@@ -91,14 +94,14 @@ class graphing_page(tk.Frame):
         #label.pack(pady=500,padx=500)
 
         back_button = ttk.Button(self, text="Back to Main Menu", command = lambda: controller.show_frame(StartPage))
-        back_button.pack()
+        back_button.pack(side=tk.BOTTOM)
 
         edit_data_page_button = ttk.Button(self, text="Edit Data", command = lambda: controller.show_frame(edit_data_page))
-        edit_data_page_button.pack()
+        edit_data_page_button.pack(side=tk.BOTTOM)
 
         fig = Figure(figsize=(5,5), dpi=100)
 
-        data = [[0,1,2,3,4,5,6],[7,6,5,4,3,2,1]] ##data to be edited
+        data = [[0.5,1.2,2.8,3,4,6,7],[0,3,4,4.5,6,10,9]] ##data to be edited
         graph=fig.add_subplot(111)
         if len(data)>3:
             raise Exception("You cannot plot graphs with more than 3 dimensions! Go do math mods instead!")
@@ -106,9 +109,12 @@ class graphing_page(tk.Frame):
             graph=fig.add_subplot(111, projection="3d")
 
         graph.plot(data)
+        #graph.ylabel("Sample y label")
+        #graph.xlabel("Sample x label")
+        #graph.axis([0,10,0,10]) #[xmin,xmax,ymin,ymax]
         page = FigureCanvasTkAgg(fig,master=controller)
         page.draw()
-        
+        page.get_tk_widget().pack(side=tk.BOTTOM)
 
 class edit_data_page(tk.Frame):
     def __init__(self, parent, controller):
