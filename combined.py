@@ -93,11 +93,11 @@ class graphing_page(tk.Frame):
         label = tk.Label(self, text="Plotting Page", font=("Arial",12))
         #label.pack(pady=500,padx=500)
 
-        back_button = ttk.Button(self, text="Back to Main Menu", command = lambda: controller.show_frame(StartPage))
-        back_button.pack(side=tk.BOTTOM)
-
         edit_data_page_button = ttk.Button(self, text="Edit Data", command = lambda: controller.show_frame(edit_data_page))
-        edit_data_page_button.pack(side=tk.BOTTOM)
+        edit_data_page_button.pack(side=tk.TOP,padx=10,pady=10)
+
+        back_button = ttk.Button(self, text="Back to Main Menu", command = lambda: controller.show_frame(StartPage))
+        back_button.pack(side=tk.TOP,padx=10)
 
         fig = Figure(figsize=(5,5), dpi=100)
         graph=fig.add_subplot(111)
@@ -141,6 +141,35 @@ class edit_data_page(tk.Frame):
         #go and edit the csv yourself because you are adding another axis to the plot
         open_csv_button = ttk.Button(self, text="Edit File", command = lambda: controller.open_csv())
         open_csv_button.pack(padx=10,pady=10)
+
+        #Display Data
+        tree = ttk.Treeview(self, selectmode = 'extended')
+        tree.pack(side='left',fill=tk.BOTH,expand=True)
+        scrlbar = ttk.Scrollbar(self,orient='vertical',command=tree.yview)
+        scrlbar.pack(side='right',fill='y')
+        tree.configure(yscrollcommand=scrlbar.set)
+
+        #Data values
+        tree["columns"] = ("1", "2","3")
+        tree['show'] = 'headings'
+        tree.column("1", width=100, anchor='c')
+        tree.column("2", width=100, anchor='c')
+        tree.column("3", width=100, anchor='c')
+        tree.heading("1", text="Index")
+        tree.heading("2", text="Account")
+        tree.heading("3", text="Type")
+        tree.insert("",'end',text="L1",values=("1","Big1","Best"))
+        tree.insert("",'end',text="L2",values=("2","Big2","Best"))
+        tree.insert("",'end',text="L3",values=("3","Big3","Best"))
+        tree.insert("",'end',text="L4",values=("4","Big4","Best"))
+        tree.insert("",'end',text="L5",values=("5","Big5","Best"))
+        tree.insert("",'end',text="L6",values=("6","Big6","Best"))
+        tree.insert("",'end',text="L7",values=("7","Big7","Best"))
+        tree.insert("",'end',text="L8",values=("8","Big8","Best"))
+        tree.insert("",'end',text="L9",values=("9","Big9","Best"))
+        tree.insert("",'end',text="L10",values=("10","Big10","Best"))
+        tree.insert("",'end',text="L11",values=("11","Big11","Best"))
+        tree.insert("",'end',text="L12",values=("12","Big12","Best"))
 
 
 if __name__ == "__main__":
