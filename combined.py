@@ -190,10 +190,15 @@ class edit_data_page(tk.Frame):
         col2 = tk.Label(self,text='Column 2').place(rely=0.8,relx=0.38)
         col3 = tk.Label(self,text='Column 3').place(rely=0.8,relx=0.69)
 
-        col1_entry = tk.Entry(self).place(rely=0.85,relx=0.07)
-        col2_entry = tk.Entry(self).place(rely=0.85,relx=0.38)
-        col3_entry = tk.Entry(self).place(rely=0.85,relx=0.69)
+        self.col1_entry = tk.Entry(self)
+        self.col1_entry.place(rely=0.85,relx=0.07)
+        self.col2_entry = tk.Entry(self)
+        self.col2_entry.place(rely=0.85,relx=0.38)
+        self.col3_entry = tk.Entry(self)
+        self.col3_entry.place(rely=0.85,relx=0.69)
 
+        #To insert text into entrybox
+        # self.col1_entry.insert(0,some_text)
 
     def select_item(self, event):
         curItem = self.tree.item(self.tree.focus())
@@ -206,12 +211,29 @@ class edit_data_page(tk.Frame):
             cell_value = curItem['text']
         elif col == '#1':
             cell_value = curItem['values'][0]
+            self.col1_add_value(cell_value)
         elif col == '#2':
             cell_value = curItem['values'][1]
+            self.col2_add_value(cell_value)
         elif col == '#3':
             cell_value = curItem['values'][2]
+            self.col3_add_value(cell_value)
 
         print ('cell_value = ', cell_value)
+
+    def col1_add_value(self, cell_value):
+        self.col1_entry.delete(0,tk.END)
+        self.col1_entry.insert(0,cell_value)
+
+    def col2_add_value(self, cell_value):
+        self.col2_entry.delete(0,tk.END)
+        self.col2_entry.insert(0,cell_value)
+
+    def col3_add_value(self, cell_value):
+        self.col3_entry.delete(0,tk.END)
+        self.col3_entry.insert(0,cell_value)
+
+some_text = 'Some random text'
 
 if __name__ == "__main__":
     app = Datatrackingapp()
