@@ -124,7 +124,7 @@ class edit_data_page(tk.Frame):
         tk.Frame.__init__(self,parent)
         self.controller.title("Edit Values Page")
 
-        text = tk.Label(self,text="Edit Data Page", font=("Times New Roman",14))
+        text = tk.Label(self,text="Edit Data", font=("Times New Roman",14))
         # text.pack()
         text.place(relx=0.5,anchor='n')
         heading= font.Font(text, text.cget("font"))
@@ -210,31 +210,28 @@ class edit_data_page(tk.Frame):
                 count += 1
 
 
-        #Entry to input values
-        # col1 = tk.Label(self,text='Column 1').place(rely=0.8,relx=0.07)
-        # col2 = tk.Label(self,text='Column 2').place(rely=0.8,relx=0.38)
-        # col3 = tk.Label(self,text='Column 3').place(rely=0.8,relx=0.69)
+        #Entry boxes labels
+        col1 = tk.Label(self,text='Row No.').place(rely=0.8,relx=0.07)
+        col2 = tk.Label(self,text='Column No.').place(rely=0.8,relx=0.38)
+        col3 = tk.Label(self,text='Change value into:').place(rely=0.8,relx=0.69)
 
-        col1 = ttk.Label(self,text='Row No.').place(rely=0.8,relx=0.07)
-        col2 = ttk.Label(self,text='Column No.').place(rely=0.8,relx=0.38)
-        col3 = ttk.Label(self,text='Change value into:').place(rely=0.8,relx=0.69)
+        self.row_value = tk.IntVar()
+        self.col_value = tk.IntVar()
+        self.input_value = tk.IntVar()
 
-        self.col1_entry = tk.Entry(self)
+        #Initialize entry boxes
+        self.col1_entry = tk.Entry(self,textvariable=self.row_value)
         self.col1_entry.place(rely=0.85,relx=0.07)
-        self.col2_entry = tk.Entry(self)
+        self.col2_entry = tk.Entry(self,textvariable=self.col_value)
         self.col2_entry.place(rely=0.85,relx=0.38)
-        self.col3_entry = tk.Entry(self)
+        self.col3_entry = tk.Entry(self,textvariable=self.input_value)
         self.col3_entry.place(rely=0.85,relx=0.69)
 
-        print_button = ttk.Button(self, text="Print Variable", command=lambda:self.print_value(self.col1,self.col2,self.col3))
+        print_button = ttk.Button(self, text="Print Variable", command=lambda:self.print_value(self.row_value,self.col_value,self.col3_entry))
         print_button.place(rely = 0.9,relx= 0.38)
 
         #To insert text into entrybox
         # self.col1_entry.insert(0,some_text)
-
-        self.col1 = tk.IntVar()
-        self.col2 = tk.StringVar()
-        self.col3 = tk.StringVar()
 
     def select_item(self, event):
         curItem = self.tree.item(self.tree.focus())
@@ -248,41 +245,37 @@ class edit_data_page(tk.Frame):
         if col == '#1' and row_value != '':
             col_no = 1
             row_no = int(curItem['text'])
-            self.col1_add_value(row_no)
-            self.col1 = row_no
-            self.col2_add_value(col_no)
-            self.col2 = col_no
+            self.row_no_add_value(row_no)
+            self.row_value = row_no
+            self.col_no_add_value(col_no)
+            self.col_value = col_no
         elif col == '#2' and row_value != '':
             col_no = 2
             row_no = int(curItem['text'])
-            self.col1_add_value(row_no)
-            self.col1 = row_no
-            self.col2_add_value(col_no)
-            self.col2 = col_no
+            self.row_no_add_value(row_no)
+            self.row_value = row_no
+            self.col_no_add_value(col_no)
+            self.col_value = col_no
         elif col == '#3' and row_value != '':
             col_no = 3
             row_no = int(curItem['text'])
-            self.col1_add_value(row_no)
-            self.col1 = row_no
-            self.col2_add_value(col_no)
-            self.col2 = col_no
+            self.row_no_add_value(row_no)
+            self.row_value = row_no
+            self.col_no_add_value(col_no)
+            self.col_value = col_no
 
         # print ('cell_value = ', cell_value)
 
-    def col1_add_value(self, cell_value):
+    def row_no_add_value(self, cell_value):
         self.col1_entry.delete(0,tk.END)
         self.col1_entry.insert(0,cell_value)
 
-    def col2_add_value(self, cell_value):
+    def col_no_add_value(self, cell_value):
         self.col2_entry.delete(0,tk.END)
         self.col2_entry.insert(0,cell_value)
 
-    def col3_add_value(self, cell_value):
-        self.col3_entry.delete(0,tk.END)
-        self.col3_entry.insert(0,cell_value)
-
     def print_value(self, a, b, c):
-        print(a,b,c)
+        print(a,b,c.get())
 
 if __name__ == "__main__":
     app = Datatrackingapp()
