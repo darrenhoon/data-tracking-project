@@ -8,15 +8,16 @@ import tkinter.messagebox
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg, NavigationToolbar2Tk
 from matplotlib.figure import Figure
 import csv
-
 import pandas as pd
+import datetime
+##global variables: variable1, variable2, variable3, data eg data[varialbe1]
 
 class Datatrackingapp(tk.Tk): #root window
 
     def __init__(self, *args, **kwargs):
         
         #remember to import pandas
-        csv_data = pd.read_csv('D:/Desktop/pokemonData.csv', header = None)
+        csv_data = pd.read_csv('Spending.csv', header = None)
         global data
         global headers
         headers = csv_data.iloc[0]
@@ -31,7 +32,7 @@ class Datatrackingapp(tk.Tk): #root window
 
         self.frames = {}
 
-        for f in (StartPage,graphing_page,edit_data_page):
+        for f in (StartPage,edit_data_page):
             # self.add_frame(f)
             frame = f(self.container,self) 
             self.frames[f] = frame
@@ -43,10 +44,34 @@ class Datatrackingapp(tk.Tk): #root window
         global variable1
         global variable2
         global variable3
-        
+        global plotting_data
+
         variable1 = str(var1.get())
         variable2 = str(var2.get())
         variable3 = str(var3.get())
+        plotting_data = []
+        
+        plotting_vars = [variable1, variable2, variable3]
+        for var in plotting_vars:
+            if var == "-":
+                continue
+            elif var == "Date":
+                values = [datetime.datetime.strptime(d,"%m/%d/%Y").date() for d in data[var].tolist()]
+                plotting_data.append(values)
+            else:
+                values = data[var].tolist()
+                values = [int(x) for x in values]
+                print(values)
+                plotting_data.append(values)
+
+        frame = graphing_page(self.container,self)
+        self.frames[graphing_page] = frame
+        frame.grid(row=0,column=0,sticky="nsew")
+
+        print(plotting_data)
+        
+        self.show_frame(graphing_page)
+        
 
     def show_frame(self,cont):
 
@@ -65,8 +90,7 @@ for your pc to open your selected file. Thank you!")
         
         filepath = filedialog.askopenfilename(initialdir="C:/", title="select file")
         print(filepath)
-        #big creds to https://stackoverflow.com/questions/434597/open-document-with-default-os-application-in-python-both-in-windows-and-mac-os
-        # ily :')
+        
         if platform.system() == 'Darwin':       # macOS
             subprocess.call(('open', filepath))
         elif platform.system() == 'Windows':    # Windows
@@ -114,7 +138,8 @@ class StartPage(tk.Frame):
         style.map('TButton', background = [('active','black')], 
         foreground = [('active', 'navy')])
 
-        plot_button = Button(self, text='Start Plot!', command = lambda: [controller.set_headers(var1, var2, var3),controller.show_frame(graphing_page)])
+##        plot_button = Button(self, text='Start Plot!', command = lambda: [controller.set_headers(var1, var2, var3),controller.show_frame(graphing_page)])
+        plot_button = Button(self, text='Start Plot!', command = lambda: controller.set_headers(var1, var2, var3))
         #plot_button.grid(row=1,column=2)
         plot_button.pack(side=tk.TOP,padx=10,pady=10)
 
@@ -143,13 +168,15 @@ class graphing_page(tk.Frame):
 
         fig = Figure(figsize=(5,5), dpi=100)
         graph=fig.add_subplot(111)
-        data = [[0.5,1.2,2.8,3,4,6,7],[0,3,4,4.5,6,10,9]] ##data to be edited
-        if len(data)>3:
-            raise Exception("You cannot plot graphs with more than 3 dimensions! Go do math mods instead!")
-        elif len(data)==3:
-            graph=fig.add_subplot(111, projection="3d")
 
-        graph.plot(data)
+        global plotting_data
+
+        if len(plotting_data)>3:
+            raise Exception("You cannot plot graphs with more than 3 dimensions! Go do math mods instead!")
+        elif len(plotting_data)==3:
+            graph=fig.add_subplot(111, projection="3d")
+        
+        graph.plot(plotting_data)
         #graph.ylabel("Sample y label")
         #graph.xlabel("Sample x label")
         #graph.axis([0,10,0,10]) #[xmin,xmax,ymin,ymax]
@@ -320,4 +347,6 @@ class edit_data_page(tk.Frame):
 if __name__ == "__main__":
     app = Datatrackingapp()
     # app.geometry('400x400')
-    app.mainloop()
+    app.update_idletasks()
+    app.update()
+##    app.mainloop()
