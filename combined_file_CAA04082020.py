@@ -32,7 +32,7 @@ class Datatrackingapp(tk.Tk): #root window
 
         self.frames = {}
 
-        for f in (StartPage,edit_data_page):
+        for f in (StartPage,):
             # self.add_frame(f)
             frame = f(self.container,self) 
             self.frames[f] = frame
@@ -45,6 +45,7 @@ class Datatrackingapp(tk.Tk): #root window
         global variable2
         global variable3
         global plotting_data
+        global plotting_vars
 
         variable1 = str(var1.get())
         variable2 = str(var2.get())
@@ -61,11 +62,15 @@ class Datatrackingapp(tk.Tk): #root window
             else:
                 values = data[var].tolist()
                 values = [int(x) for x in values]
-                print(values)
+##                print(values)
                 plotting_data.append(values)
 
         frame = graphing_page(self.container,self)
         self.frames[graphing_page] = frame
+        frame.grid(row=0,column=0,sticky="nsew")
+
+        frame = edit_data_page(self.container,self)
+        self.frames[edit_data_page] = frame
         frame.grid(row=0,column=0,sticky="nsew")
 
         print(plotting_data)
@@ -219,82 +224,81 @@ class edit_data_page(tk.Frame):
         #Display Data
         self.tree = Treeview(self, selectmode = 'none')
         # self.tree.pack(side='left',fill=tk.BOTH,expand=True)
-        self.tree.place(rely=0.25,relx=0.13,relheight=0.5)
+        self.tree.place(rely=0.25,relx=0.13,relheight=0.5,relwidth=0.72)
         scrlbar = Scrollbar(self,orient='vertical',command=self.tree.yview)
         # scrlbar.pack(side='right',fill='y')
         scrlbar.place(rely=0.25,relx=0.96,relheight=0.5)
         self.tree.configure(yscrollcommand=scrlbar.set)
 
-        #Tree components
-        self.tree["columns"] = ("1", "2","3")
-        self.tree['show'] = 'headings'
-        self.tree.column('#0', width=50, anchor='c')
-        self.tree.column("1", width=100, anchor='c')
-        self.tree.column("2", width=100, anchor='c')
-        self.tree.column("3", width=100, anchor='c')
-        self.tree.heading("1", text="Index")
-        self.tree.heading("2", text="Account")
-        self.tree.heading("3", text="Type")
-        self.tree.bind('<ButtonRelease-1>', self.select_item)
-
-        #Sample data values
-        self.tree.insert("",'end',text="1",values=("1","Big1","Best"))
-        self.tree.insert("",'end',text="2",values=("2","Big2","Best"))
-        self.tree.insert("",'end',text="3",values=("3","Big3","Best"))
-        self.tree.insert("",'end',text="4",values=("4","Big4","Best"))
-        self.tree.insert("",'end',text="5",values=("5","Big5","Best"))
-        self.tree.insert("",'end',text="6",values=("6","Big6","Best"))
-        self.tree.insert("",'end',text="7",values=("7","Big7","Best"))
-        self.tree.insert("",'end',text="8",values=("8","Big8","Best"))
-        self.tree.insert("",'end',text="9",values=("9","Big9","Best"))
-        self.tree.insert("",'end',text="10",values=("10","Big10","Best"))
-        self.tree.insert("",'end',text="11",values=("11","Big11","Best"))
-        self.tree.insert("",'end',text="12",values=("12","Big12","Best"))
-        self.tree.insert("",'end',text="13",values=("13","Big13","Best"))
-        self.tree.insert("",'end',text="14",values=("14","Big14","Best"))
-        self.tree.insert("",'end',text="15",values=("15","Big15","Best"))
-        self.tree.insert("",'end',text="16",values=("16","Big16","Best"))
+        #Check which variables are selected
+        variables = []
+        for variable in plotting_vars:
+            if variable != '-':
+                variables.append(variable)
+        variable_count = len(variables)
 
         #Sample Tree with csv data
-        self.tree["columns"] = ("1", "2","3")
-        # self.tree['show'] = 'headings'
         self.tree.column('#0', width=50, anchor='c')
-        self.tree.column("1", width=100, anchor='c')
-        self.tree.column("2", width=100, anchor='c')
-        self.tree.column("3", width=100, anchor='c')
-        self.tree.heading("1", text="Date")
-        self.tree.heading("2", text="Spending")
-        self.tree.heading("3", text="Total")
+        self.tree["columns"] = variables
+        for count, var in enumerate(variables):
+            if count == 0:
+                self.tree.column(var, width=100, anchor='c')
+                self.tree.heading(var, text=str(var))
+            if count == 1:
+                self.tree.column(var, width=100, anchor='c')
+                self.tree.heading(var, text=str(var))
+            if count == 2:
+                self.tree.column(var, width=100, anchor='c')
+                self.tree.heading(var, text=str(var))
         self.tree.bind('<ButtonRelease-1>', self.select_item)
 
+        with open('Spending.csv','r') as f:
+            reader = csv.DictReader(f)
+            count = 1
 
-
+            for row in reader:
+                col_count = 0
+                for variable in variables:
+                    if col_count == 0:
+                        Col1 = row[variable]
+                    elif col_count == 1:
+                        Col2 = row[variable]
+                    elif col_count == 2:
+                        Col3 = row[variable]
+                    col_count += 1
+                if variable_count == 1:
+                    self.tree.insert("",'end',text=str(count),values=(Col1))
+                elif variable_count == 2:
+                    self.tree.insert("",'end',text=str(count),values=(Col1,Col2))
+                elif variable_count == 3:
+                    self.tree.insert("",'end',text=str(count),values=(Col1,Col2,Col3))
+                count += 1
 
         #Entry to input values
-        # col1 = tk.Label(self,text='Column 1').place(rely=0.8,relx=0.07)
-        # col2 = tk.Label(self,text='Column 2').place(rely=0.8,relx=0.38)
-        # col3 = tk.Label(self,text='Column 3').place(rely=0.8,relx=0.69)
+        col1 = tk.Label(self,text='Column 1').place(rely=0.8,relx=0.07)
+        col2 = tk.Label(self,text='Column 2').place(rely=0.8,relx=0.38)
+        col3 = tk.Label(self,text='Column 3').place(rely=0.8,relx=0.69)
 
         col1 = ttk.Label(self,text='Row No.').place(rely=0.8,relx=0.07)
         col2 = ttk.Label(self,text='Column No.').place(rely=0.8,relx=0.38)
         col3 = ttk.Label(self,text='Change value into:').place(rely=0.8,relx=0.69)
 
-        self.col1_entry = tk.Entry(self)
+        self.row_value = tk.IntVar()
+        self.col_value = tk.IntVar()
+        self.input_value = tk.IntVar()
+
+        self.col1_entry = tk.Entry(self,textvariable=self.row_value)
         self.col1_entry.place(rely=0.85,relx=0.07)
-        self.col2_entry = tk.Entry(self)
+        self.col2_entry = tk.Entry(self,textvariable=self.col_value)
         self.col2_entry.place(rely=0.85,relx=0.38)
-        self.col3_entry = tk.Entry(self)
+        self.col3_entry = tk.Entry(self,textvariable=self.input_value)
         self.col3_entry.place(rely=0.85,relx=0.69)
 
-        print_button = ttk.Button(self, text="Print Variable", command=lambda:self.print_value(self.col1,self.col2,self.col3))
+        print_button = ttk.Button(self, text="Print Variable", command=lambda:self.print_value(self.row_value,self.col_value,self.input_value))
         print_button.place(rely = 0.9,relx= 0.38)
 
         #To insert text into entrybox
         # self.col1_entry.insert(0,some_text)
-
-        self.col1 = tk.IntVar()
-        self.col2 = tk.StringVar()
-        self.col3 = tk.StringVar()
 
     def select_item(self, event):
         curItem = self.tree.item(self.tree.focus())
@@ -309,23 +313,23 @@ class edit_data_page(tk.Frame):
             col_no = 1
             row_no = int(curItem['text'])
             self.col1_add_value(row_no)
-            self.col1 = row_no
+            self.row_value = row_no
             self.col2_add_value(col_no)
-            self.col2 = col_no
+            self.col_value = col_no
         elif col == '#2' and row_value != '':
             col_no = 2
             row_no = int(curItem['text'])
             self.col1_add_value(row_no)
-            self.col1 = row_no
+            self.row_value = row_no
             self.col2_add_value(col_no)
-            self.col2 = col_no
+            self.col_value = col_no
         elif col == '#3' and row_value != '':
             col_no = 3
             row_no = int(curItem['text'])
             self.col1_add_value(row_no)
-            self.col1 = row_no
+            self.row_value = row_no
             self.col2_add_value(col_no)
-            self.col2 = col_no
+            self.col_value = col_no
 
         # print ('cell_value = ', cell_value)
 
@@ -342,7 +346,7 @@ class edit_data_page(tk.Frame):
         self.col3_entry.insert(0,cell_value)
 
     def print_value(self, a, b, c):
-        print(a,b,c)
+        print(a,b,c.get())
 
 if __name__ == "__main__":
     app = Datatrackingapp()
