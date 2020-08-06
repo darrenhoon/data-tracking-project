@@ -10,7 +10,9 @@ from matplotlib.figure import Figure
 import csv
 import pandas as pd
 import datetime
-##global variables: variable1, variable2, variable3, data eg data[varialbe1]
+
+global variable1, variable2, variable3, selected_col, selected_row, changed_value
+##global variables: variable1, variable2, variable3, data eg data[varialbe1], selected_col, selected_row, changed_value, plotting_data, plotting_vars
 
 class Datatrackingapp(tk.Tk): #root window
 
@@ -41,15 +43,14 @@ class Datatrackingapp(tk.Tk): #root window
         self.show_frame(StartPage)
         
     def set_headers(self, var1, var2, var3):
-        global variable1
-        global variable2
-        global variable3
-        global plotting_data
-        global plotting_vars
 
         variable1 = str(var1.get())
         variable2 = str(var2.get())
         variable3 = str(var3.get())
+        
+        global plotting_data
+        global plotting_vars
+        
         plotting_data = []
         
         plotting_vars = [variable1, variable2, variable3]
@@ -72,10 +73,20 @@ class Datatrackingapp(tk.Tk): #root window
         frame = edit_data_page(self.container,self)
         self.frames[edit_data_page] = frame
         frame.grid(row=0,column=0,sticky="nsew")
-
-        print(plotting_data)
         
         self.show_frame(graphing_page)
+
+    def show_edited_frame(self,values):
+        frame = graphing_page(self.container,self)
+        self.frames[graphing_page] = frame
+        frame.grid(row=0,column=0,sticky="nsew")
+
+        frame = edit_data_page(self.container,self)
+        self.frames[edit_data_page] = frame
+        frame.grid(row=0,column=0,sticky="nsew")
+
+        self.show_frame(graphing_page)
+    
         
 
     def show_frame(self,cont):
@@ -202,21 +213,13 @@ class edit_data_page(tk.Frame):
         text.place(relx=0.5,anchor='n')
         heading= font.Font(text, text.cget("font"))
         # text.configure(underline = True) #Doesn't underline the entire text
-
-        #save button
-        ##edited info here will be written on the csv, then the button just goes back to the graphing_page
-        #to be updated
-        # save_button = ttk.Button(self, text="Save changes", command = lambda: controller.show_frame(graphing_page))
-        save_button = ttk.Button(self, text="Save changes", command = lambda: controller.show_frame(graphing_page))
+        
+        save_button = ttk.Button(self, text="Save changes", command = lambda: self.save_changes())
         # save_button.pack(padx=10,pady=10)
         save_button.place(relx=0.5,rely=0.1,anchor='n')
-
-        #discard button
         discard_button = ttk.Button(self, text="Discard", command = lambda: controller.show_frame(graphing_page))
         # discard_button.pack(padx=10,pady=10)
         discard_button.place(relx=0.5,rely=0.15,anchor='n')
-
-        #go and edit the csv yourself because you are adding another axis to the plot
         open_csv_button = ttk.Button(self, text="Edit File", command = lambda: controller.open_csv())
         # open_csv_button.pack(padx=10,pady=10)
         open_csv_button.place(relx=0.5,rely=0.2,anchor='n')
@@ -300,6 +303,13 @@ class edit_data_page(tk.Frame):
         #To insert text into entrybox
         # self.col1_entry.insert(0,some_text)
 
+    def save_changes(self):
+        '''assuming you have selected_row, selected_col, and changed_value
+        edit the csv here'''
+        global plotting_data
+##        plotting_data = edited_csv_retrieved_as_list
+        controller.show_edited_frame()
+
     def select_item(self, event):
         curItem = self.tree.item(self.tree.focus())
         col = self.tree.identify_column(event.x)
@@ -330,6 +340,10 @@ class edit_data_page(tk.Frame):
             self.row_value = row_no
             self.col2_add_value(col_no)
             self.col_value = col_no
+
+        selected_col = col_no
+        selected_row = row_no
+##        changed_value = 
 
         # print ('cell_value = ', cell_value)
 
