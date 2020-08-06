@@ -303,9 +303,41 @@ class edit_data_page(tk.Frame):
         #To insert text into entrybox
         # self.col1_entry.insert(0,some_text)
 
+    def edit_csv(self, filename, row_number, col_name, user_input):
+    #note, this assumes that headers are the first row, index 0 in all situations
+    #pass the filename into here, along with the row number selected by user, and column (name of data)
+        tmpFile = "tmp.csv"
+        with open(filename, "r") as file, open(tmpFile, "w") as outFile:
+            reader = csv.reader(file, delimiter=',')
+            writer = csv.writer(outFile, delimiter=',')
+            rownum = 0
+            col_count = 0
+            index = 0
+            row_count = 0
+            for row in reader:
+                colValues = []
+                #for the headers, once it iterates to the correct header, keep in mind the index
+                if rownum==0:
+                    for col in row:
+                        if col==col_name:
+                            index = col_count
+                        col_count += 1
+                        colValues.append(col)
+                else:
+                    for col in row:
+                        colValues.append(col)
+                        
+                if row_count == row_number:
+                    colValues[index] = user_input
+                row_count += 1
+                writer.writerow(colValues)
+            #makes a duplicate of the original file
+        os.rename(tmpFile, filename)
+
     def save_changes(self):
         '''assuming you have selected_row, selected_col, and changed_value
         edit the csv here'''
+        self.edit_csv('Spending.csv',selected_row,selected_col,changed_value)
         global plotting_data
 ##        plotting_data = edited_csv_retrieved_as_list
         controller.show_edited_frame()
@@ -341,9 +373,10 @@ class edit_data_page(tk.Frame):
             self.col2_add_value(col_no)
             self.col_value = col_no
 
+        global selected_col, selected_row, changed_value
         selected_col = col_no
         selected_row = row_no
-##        changed_value = 
+        changed_value = self.input_value
 
         # print ('cell_value = ', cell_value)
 

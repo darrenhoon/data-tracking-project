@@ -12,7 +12,7 @@ import csv
 
 def get_data():
     #can change the file path to pick anohter file
-    csv_data = pd.read_csv('D:/Desktop/pokemonData.csv', header = None)
+    csv_data = pd.read_csv('Spending.csv', header = None)
     headers = csv_data.iloc[0]
     data = pd.DataFrame(csv_data.values[1:], columns=headers)
     #returns a pandas dataframe object
