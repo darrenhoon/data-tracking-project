@@ -304,35 +304,23 @@ class edit_data_page(tk.Frame):
         # self.col1_entry.insert(0,some_text)
 
     def edit_csv(self, filename, row_number, col_name, user_input):
-    #note, this assumes that headers are the first row, index 0 in all situations
-    #pass the filename into here, along with the row number selected by user, and column (name of data)
-        tmpFile = "tmp.csv"
-        with open(filename, "r") as file, open(tmpFile, "w") as outFile:
-            reader = csv.reader(file, delimiter=',')
-            writer = csv.writer(outFile, delimiter=',')
-            rownum = 0
-            col_count = 0
-            index = 0
-            row_count = 0
+        
+    def edit_csv(filename, row_number, col_name, user_input):
+        with open(filename, "r") as file:
+            reader = csv.DictReader(file)
+            values = []
+            counter = 0
             for row in reader:
-                colValues = []
-                #for the headers, once it iterates to the correct header, keep in mind the index
-                if rownum==0:
-                    for col in row:
-                        if col==col_name:
-                            index = col_count
-                        col_count += 1
-                        colValues.append(col)
-                else:
-                    for col in row:
-                        colValues.append(col)
-                        
-                if row_count == row_number:
-                    colValues[index] = user_input
-                row_count += 1
-                writer.writerow(colValues)
-            #makes a duplicate of the original file
-        os.rename(tmpFile, filename)
+                if counter == row_number:
+                    row[col_name] = user_input
+                values.append(row)
+                counter += 1
+
+        with open(filename, "w",newline='') as file:
+            writer = csv.DictWriter(file,fieldnames=headers)
+            writer.writeheader()
+            for value in values:
+                writer.writerow(value)
 
     def save_changes(self):
         '''assuming you have selected_row, selected_col, and changed_value
