@@ -234,6 +234,7 @@ class edit_data_page(tk.Frame):
         self.tree.configure(yscrollcommand=scrlbar.set)
 
         #Check which variables are selected
+        global variables
         variables = []
         for variable in plotting_vars:
             if variable != '-':
@@ -301,20 +302,28 @@ class edit_data_page(tk.Frame):
         print_button.place(rely = 0.9,relx= 0.38)
 
         #To insert text into entrybox
-        # self.col1_entry.insert(0,some_text)
-
-    def edit_csv(self, filename, row_number, col_name, user_input):
         
-    def edit_csv(filename, row_number, col_name, user_input):
+        # self.col1_entry.insert(0,some_text)
+        
+    def edit_csv(self, filename, row_number, col_number, user_input):
         with open(filename, "r") as file:
             reader = csv.DictReader(file)
+            col_headers = ['Date','Spending','Total']
+
+            col_name = {}
+            count = 1
+            for variable in variables:
+                col_name[count] = variable
+                count += 1
+                
             values = []
             counter = 0
             for row in reader:
-                if counter == row_number:
-                    row[col_name] = user_input
+                if counter == row_number-1:
+                    row[col_name[col_number]] = user_input
                 values.append(row)
                 counter += 1
+        file.close()
 
         with open(filename, "w",newline='') as file:
             writer = csv.DictWriter(file,fieldnames=headers)
@@ -325,10 +334,10 @@ class edit_data_page(tk.Frame):
     def save_changes(self):
         '''assuming you have selected_row, selected_col, and changed_value
         edit the csv here'''
-        self.edit_csv('Spending.csv',selected_row,selected_col,changed_value)
+        self.edit_csv('Spending.csv',self.row_value,self.col_value,self.input_value.get())
         global plotting_data
 ##        plotting_data = edited_csv_retrieved_as_list
-        controller.show_edited_frame()
+        self.controller.show_edited_frame(plotting_data)
 
     def select_item(self, event):
         curItem = self.tree.item(self.tree.focus())
@@ -361,10 +370,10 @@ class edit_data_page(tk.Frame):
             self.col2_add_value(col_no)
             self.col_value = col_no
 
-        global selected_col, selected_row, changed_value
-        selected_col = col_no
-        selected_row = row_no
-        changed_value = self.input_value
+##        global selected_col, selected_row, changed_value
+##        selected_col = col_no
+##        selected_row = row_no
+##        changed_value = self.input_value.get()
 
         # print ('cell_value = ', cell_value)
 
